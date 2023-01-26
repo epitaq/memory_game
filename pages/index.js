@@ -3,31 +3,42 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { PlayingCard } from '../components/playingCard';
 import {getData} from '../components/getData'
+import { Setting } from '../components/setting/setting';
+import { Select } from '../components/setting/select';
 
 
 export default function Index() {
-  let [activeCard, setActiveCard] = React.useState([])
-  let [cardData, setCardData] = React.useState()
+  let [activeCard, setActiveCard] = React.useState([]) // クリックされ表にされているカード
+  let [cardData, setCardData] = React.useState() // 全てのカードのデータ
+  let [cardType, setCardType] = React.useState('nijisanji') // カードの種類
+
+  const cardTypeList = ['hinatazaka46', 'nijisanji']
 
   // カードのデータを取得
-  let backImg = getData().backImg
-  let data = dataForm(getData().card)
 
   // 一回のみ実行 データを二重にしてシャッフル
-  React.useEffect(() => {
-    setCardData(shuffleArray(data.concat(data)))
-  }, [])
+  React.useEffect(() => {setCardData(shuffleArray(data.concat(data)))})
 
-  // 切り替わりが早すぎて見えない
+  // React.useEffect(() => {
+    let cardDataJson = getData('/api/'+cardType+'.json')
+    let backImg = cardDataJson.backImg
+    let data = dataForm(cardDataJson.data)
+
+
+  // }, [cardType])
+
+  // 判定
   React.useEffect(() => {
     console.log(cardData)
     console.log(activeCard)
     if ((new Set(activeCard)).size == 2) {
       if (cardData[activeCard[0]].img == cardData[activeCard[1]].img){
-        setCardData(cardData.map((data, index) => (
-          index == activeCard[0] || index == activeCard[1]
-            ? {img: data.img, active: false}
-            : data)))
+        setTimeout(() => {
+          setCardData(cardData.map((data, index) => (
+            index == activeCard[0] || index == activeCard[1]
+              ? {img: data.img, active: false}
+              : data)))
+        }, 500)
         console.log('get !!');
       }
       setTimeout(() => {
@@ -38,24 +49,28 @@ export default function Index() {
 
 
   return (
-    <Container maxWidth='lg'>
-      <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
-        {cardData && cardData.map(({img, active}, index) => {
-          if (active) {
-            return (
-              <Box onClick={() => {
-                setActiveCard([...activeCard, index])
-              }}>
-                <PlayingCard active={activeCard.includes(index)} activeImg={img} inactiveImg={backImg}/>
-              </Box>
-            )
-          } else {
-            return <PlayingCard/>
-          }
+    <>
+      {/* メイン */}
+      <Container maxWidth='lg'>
+        <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
+          {cardData && cardData.map(({img, active}, index) => {
+            if (active) {
+              return (
+                <Box onClick={() => {
+                  setActiveCard([...activeCard, index])
+                }}>
+                  <PlayingCard active={activeCard.includes(index)} activeImg={img} inactiveImg={backImg}/>
+                </Box>
+              )
+            } else {
+              return <PlayingCard/>
+            }
 
-        })}
-      </Box>
-    </Container>
+          })}
+        </Box>
+      </Container>
+      <Setting option={[<Select setCardType={setCardType} cardTypeList={cardTypeList} />, ]}/>
+    </>
   );
 }
 
