@@ -17,7 +17,8 @@ const cardOneSide = (img) => {
   let color
   if (img){
     color = 'white'
-  }
+  } 
+  
   return (
     <Card sx={{height: 176, width: 126, backgroundColor: color, m: 1}}>
       <CardMedia

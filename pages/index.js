@@ -95,5 +95,3 @@ const dataForm = (array) => {
   return data
 }
 
-
-
