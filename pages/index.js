@@ -29,7 +29,7 @@ export default function Index() {
             index == activeCard[0] || index == activeCard[1]
               ? {img: data.img, active: false}
               : data)))
-        }, 500);
+        }, 500)
         console.log('get !!');
       }
       setTimeout(() => {
