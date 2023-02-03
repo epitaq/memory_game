@@ -24,11 +24,13 @@ export default function Index() {
     console.log(activeCard)
     if ((new Set(activeCard)).size == 2) {
       if (cardData[activeCard[0]].img == cardData[activeCard[1]].img){
-        setCardData(cardData.map((data, index) => (
-          index == activeCard[0] || index == activeCard[1]
-            ? {img: data.img, active: false}
-            : data)))
-        console.log('get !!');
+        setTimeout(() => {
+          setCardData(cardData.map((data, index) => (
+            index == activeCard[0] || index == activeCard[1]
+              ? {img: data.img, active: false}
+              : data)))
+          console.log('get !!');
+        }, 500);
       }
       setTimeout(() => {
         setActiveCard([])
