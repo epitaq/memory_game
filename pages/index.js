@@ -2,7 +2,6 @@ import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { PlayingCard } from '../components/playingCard';
-import {getData} from '../components/getData'
 import { Setting } from '../components/setting/setting';
 import { Select } from '../components/setting/select';
 
@@ -10,26 +9,24 @@ import { Select } from '../components/setting/select';
 export default function Index() {
   let [activeCard, setActiveCard] = React.useState([]) // クリックされ表にされているカード
   let [cardData, setCardData] = React.useState() // 全てのカードのデータ
+  let [backImg, setBackImg] = React.useState() //カードの裏面
   let [cardType, setCardType] = React.useState('nijisanji') // カードの種類
 
-  const cardTypeList = ['hinatazaka46', 'nijisanji']
-
+  const cardTypeList = [{id:'hinatazaka46', display:'日向坂46'}, {id:'nijisanji', display:'にじさんじ'}]
+  
   // カードのデータを取得
-
-  // 一回のみ実行 データを二重にしてシャッフル
-  React.useEffect(() => {setCardData(shuffleArray(data.concat(data)))})
-
-  // React.useEffect(() => {
-    let cardDataJson = getData('/api/'+cardType+'.json')
-    let backImg = cardDataJson.backImg
-    let data = dataForm(cardDataJson.data)
-
-
-  // }, [cardType])
+  React.useEffect(() => {
+    fetch('/api/'+cardType)
+      .then(res => res.json())
+      .then(data => {
+        setBackImg(data.backImg)
+        let tmpData = dataForm(data.data)
+        setCardData(shuffleArray(tmpData.concat(tmpData)))
+      })
+  }, [cardType])
 
   // 判定
   React.useEffect(() => {
-    console.log(cardData)
     console.log(activeCard)
     if ((new Set(activeCard)).size == 2) {
       if (cardData[activeCard[0]].img == cardData[activeCard[1]].img){

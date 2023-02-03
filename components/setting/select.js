@@ -13,13 +13,13 @@ export const Select = ({setCardType, cardTypeList}) => {
       <RadioGroup>
         {cardTypeList.map(type =>
           <FormControlLabel
-            value={type}
+            value={type.id}
             control={
               <Radio
                 onChange={() => {
-                  setCardType(type)
+                  setCardType(type.id)
                 }}/>}
-            label={type} />
+            label={type.display} />
         )}
       </RadioGroup>
     </FormControl>
