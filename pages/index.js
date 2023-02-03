@@ -29,8 +29,8 @@ export default function Index() {
             index == activeCard[0] || index == activeCard[1]
               ? {img: data.img, active: false}
               : data)))
-          console.log('get !!');
         }, 500);
+        console.log('get !!');
       }
       setTimeout(() => {
         setActiveCard([])
