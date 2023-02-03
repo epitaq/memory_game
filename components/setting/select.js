@@ -9,7 +9,10 @@ import Typography from '@mui/material/Typography'
 export const Select = ({setCardType, cardTypeList}) => {
   return (
     <FormControl>
-      <FormLabel>カードの種類</FormLabel>
+      {/* <FormLabel>カードの種類</FormLabel> */}
+      <Typography >
+        カードの種類
+      </Typography>
       <RadioGroup>
         {cardTypeList.map(type =>
           <FormControlLabel

@@ -4,6 +4,7 @@ import Drawer from '@mui/material/Drawer'
 import { Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
+import { Box } from '@mui/system';
 
 export const Setting = ({option}) => {
   const [open, setOpen] = React.useState(false);
@@ -20,7 +21,12 @@ export const Setting = ({option}) => {
       anchor='right'
       open={open}
       onClose={toggleOpen}>
-      {option.map(child => child)}
+      {option.map(child => (
+          <Box sx={{m:1}}>
+            {child}
+          </Box>
+        )
+      )}
     </Drawer>
     </>
   )
