@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import { PlayingCard } from '../components/playingCard';
 import { Setting } from '../components/setting/setting';
 import { Select } from '../components/setting/select';
-
+import { LevelSlider } from '../components/setting/levelSlider';
 
 export default function Index() {
   let [activeCard, setActiveCard] = React.useState([]) // クリックされ表にされているカード
   let [cardData, setCardData] = React.useState() // 全てのカードのデータ
   let [backImg, setBackImg] = React.useState() //カードの裏面
   let [cardType, setCardType] = React.useState('nijisanji') // カードの種類
+  let [level, setLevel] = React.useState(20) //難しさ、これでカードの枚数を制御
 
   const cardTypeList = [{id:'hinatazaka46', display:'日向坂46'}, {id:'nijisanji', display:'にじさんじ'}]
   
@@ -19,11 +20,12 @@ export default function Index() {
     fetch('/api/'+cardType)
       .then(res => res.json())
       .then(data => {
-        setBackImg(data.backImg)
-        let tmpData = dataForm(data.data)
-        setCardData(shuffleArray(tmpData.concat(tmpData)))
+        setActiveCard([]) //選択されたカードを初期化
+        setBackImg(data.backImg) //裏面を登録
+        let tmpData = shuffleArray(dataForm(data.data)).slice(0, Math.floor(level/4)) //カードの組み合わせ レベルに応じて数を変更
+        setCardData(shuffleArray(tmpData.concat(tmpData))) // カードを複製＆シャッフル
       })
-  }, [cardType])
+  }, [cardType, level])
 
   // 判定
   React.useEffect(() => {
@@ -66,7 +68,7 @@ export default function Index() {
           })}
         </Box>
       </Container>
-      <Setting option={[<Select setCardType={setCardType} cardTypeList={cardTypeList} />, ]}/>
+      <Setting option={[<Select setCardType={setCardType} cardTypeList={cardTypeList} />, <LevelSlider value={level} setValue={setLevel}/>]}/>
     </>
   );
 }

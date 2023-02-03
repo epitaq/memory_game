@@ -11,10 +11,10 @@ export const Setting = ({option}) => {
       setOpen(!open);
   }
   return (
-    <Container maxWidth='sm'>
+    <>
     <SettingsIcon
       onClick={()=>{toggleOpen()}}
-      sx={{ position: 'absolute', bottom: 0, right: 0 }}
+      sx={{ position: 'fixed', bottom: 0, right: 0 }}
       fontSize='large'/>
     <Drawer
       anchor='right'
@@ -22,6 +22,6 @@ export const Setting = ({option}) => {
       onClose={toggleOpen}>
       {option.map(child => child)}
     </Drawer>
-    </Container>
+    </>
   )
 }
