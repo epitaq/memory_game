@@ -27,7 +27,8 @@ const theme = createTheme({
     },
     text: {
       primary: "#FFFFFF"
-    }
+    },
+    mode: 'dark'
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
