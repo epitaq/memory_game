@@ -22,9 +22,22 @@ export default function Index() {
       .then(data => {
         setActiveCard([]) //選択されたカードを初期化
         setBackImg(data.backImg) //裏面を登録
-        let tmpData = shuffleArray(dataForm(data.data)).slice(0, Math.floor(level/4)) //カードの組み合わせ レベルに応じて数を変更
-        setCardData(shuffleArray(tmpData.concat(tmpData))) // カードを複製＆シャッフル
+         //カードの組み合わせ レベルに応じて数を変更
+        let tmpData = shuffleArray(
+            dataForm(data.data)
+          )
+          .slice(0, Math.floor(level/4))
+          .map(data => addKey(data, 'primary')
+        )
+        // カードを複製＆シャッフル
+        setCardData(
+          shuffleArray(
+            tmpData.concat(tmpData)
+          )
+          .map(data => addKey(data, 'secondary'))
+        ) 
       })
+    console.log(cardData);
   }, [cardType, level])
 
   // 判定
@@ -51,24 +64,32 @@ export default function Index() {
     <>
       {/* メイン */}
       <Container maxWidth='lg'>
-        <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
-          {cardData && cardData.map(({img, active}, index) => {
+        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+          {cardData && cardData.map(({img, active, key}, index) => {
             if (active) {
               return (
-                <Box onClick={() => {
+                <Box id={index} key={index} onClick={() => {
                   setActiveCard([...activeCard, index])
                 }}>
                   <PlayingCard active={activeCard.includes(index)} activeImg={img} inactiveImg={backImg}/>
                 </Box>
               )
             } else {
-              return <PlayingCard/>
+              return (
+                <Box key={index} sx={{opacity: 0}}>
+                  <PlayingCard />
+                </Box>
+              )
             }
 
           })}
         </Box>
+        {/* 設定 */}
+        <Setting option={[
+          <Select setCardType={setCardType} cardTypeList={cardTypeList} />, 
+          <LevelSlider value={level} setValue={setLevel}/>
+        ]}/>
       </Container>
-      <Setting option={[<Select setCardType={setCardType} cardTypeList={cardTypeList} />, <LevelSlider value={level} setValue={setLevel}/>]}/>
     </>
   );
 }
@@ -95,3 +116,11 @@ const dataForm = (array) => {
   return data
 }
 
+const addKey = (origin, option) => {
+  console.log(origin)
+  if (!origin.key) {
+    console.log('add key!!');
+    origin.key = origin.img + option
+  }
+  return origin
+}

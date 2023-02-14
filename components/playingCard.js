@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card'
 import { CardMedia } from '@mui/material';
 
-export const PlayingCard = ({active, activeImg, inactiveImg }) => {
+export const PlayingCard = ({active, activeImg, inactiveImg}) => {
   return (
     <>
       {active
@@ -20,7 +20,7 @@ const cardOneSide = (img) => {
   } 
   
   return (
-    <Card sx={{height: 176, width: 126, backgroundColor: color, m: 1}}>
+    <Card sx={{height: 176, width: 126, backgroundColor: color, m: 1}} >
       <CardMedia
         component='img'
         image={img}
